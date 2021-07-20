@@ -8,6 +8,7 @@ import {
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
   Dimensions,
+  ScrollView
 } from "react-native";
 import {
   shadowStyle,
@@ -34,8 +35,7 @@ export default class ActionButtonItem extends Component {
       useNativeFeedback: true,
       activeOpacity: DEFAULT_ACTIVE_OPACITY,
       fixNativeFeedbackRadius: false,
-      nativeFeedbackRippleColor: "rgba(255,255,255,0.75)",
-      numberOfLines: 1,
+      nativeFeedbackRippleColor: "rgba(255,255,255,0.75)"
     };
   }
 
@@ -45,8 +45,7 @@ export default class ActionButtonItem extends Component {
       useNativeFeedback: PropTypes.bool,
       fixNativeFeedbackRadius: PropTypes.bool,
       nativeFeedbackRippleColor: PropTypes.string,
-      activeOpacity: PropTypes.number,
-      numberOfLines: PropTypes.number,
+      activeOpacity: PropTypes.number
     };
   }
 
@@ -82,12 +81,12 @@ export default class ActionButtonItem extends Component {
       alignItems: "center",
       width: size,
       height: size,
-      borderRadius: size / 2,
+      borderRadius: 10,
       backgroundColor: this.props.buttonColor || this.props.btnColor
     };
 
     if (position !== "center")
-      buttonStyle[position] = (this.props.parentSize - size) / 2;
+      buttonStyle[position] = 0;
 
     const Touchable = getTouchableComponent(this.props.useNativeFeedback);
 
@@ -110,7 +109,6 @@ export default class ActionButtonItem extends Component {
       >
         <View>
           <Touchable
-            rejectResponderTermination
             testID={this.props.testID}
             accessibilityLabel={this.props.accessibilityLabel}
             background={touchableBackground(
@@ -118,17 +116,18 @@ export default class ActionButtonItem extends Component {
               this.props.fixNativeFeedbackRadius
             )}
             activeOpacity={this.props.activeOpacity || DEFAULT_ACTIVE_OPACITY}
-            onPress={this.props.onPress}
+            // onPress={this.props.onPress}
           >
             <View style={[
+              !hideShadow ? {...shadowStyle, ...this.props.shadowStyle} : null,
               buttonStyle,
-              !hideShadow ? {...shadowStyle, ...this.props.shadowStyle} : null
-            ]}>
+              {height: size, width: size, backgroundColor: 'white'},
+            ]}> 
               {this.props.children}
             </View>
           </Touchable>
         </View>
-        {this._renderTitle()}
+      
       </Animated.View>
     );
   }
@@ -143,8 +142,7 @@ export default class ActionButtonItem extends Component {
       parentSize,
       size,
       position,
-      spaceBetween,
-      numberOfLines,
+      spaceBetween
     } = this.props;
     const offsetTop = Math.max(size / 2 - TEXT_HEIGHT / 2, 0);
     const positionStyles = { top: offsetTop };
@@ -173,7 +171,6 @@ export default class ActionButtonItem extends Component {
         <Text
           allowFontScaling={false}
           style={[styles.text, this.props.textStyle]}
-          numberOfLines={numberOfLines}
         >
           {this.props.title}
         </Text>
@@ -182,7 +179,6 @@ export default class ActionButtonItem extends Component {
 
     return (
       <TextTouchable
-        rejectResponderTermination
         background={touchableBackground(
           this.props.nativeFeedbackRippleColor,
           this.props.fixNativeFeedbackRadius
